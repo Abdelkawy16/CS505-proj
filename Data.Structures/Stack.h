@@ -20,6 +20,6 @@ public:
 	string pop();
 	string stackTop() const;
 	bool stackIsEmpty() const;
-
+	void display();
 
 };

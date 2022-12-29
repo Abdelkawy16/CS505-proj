@@ -54,3 +54,19 @@ string Stack::stackTop() const
 	}
 	return s;
 }
+
+void Stack::display()
+{
+	// if top is less than 0, that means stack is empty
+	if (stackIsEmpty())
+		cout << "\nLogs is Empty" << endl;
+	else {
+		cout << "Logs is: \n";
+		node* cursor = top;
+		while (cursor != NULL)
+		{
+			cout << cursor->e << endl;
+			cursor = cursor->next;
+		}
+	}
+}

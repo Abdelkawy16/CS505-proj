@@ -15,20 +15,21 @@ static int chooseCommands(string cmds[], int size, string message)
     cout << message << endl;
     for (int i = 0; i < size; i++)
     {
-        cout << cmds[i] << endl;
+        cout << i+1 <<". " << cmds[i] << endl;
     }
     cin >> cmdIndex;
 
     return cmdIndex;
 }
-static void addCustomer(Queue& _customers)
+static void addCustomer(Queue& _customers, Stack& _logs)
 {
     string name = "";
     cout << "please enter customer name: ";
     cin >> name;
     Customer* _cust = new Customer(name);
+    _logs.push();
     _customers.enqueue(_cust);
-    string cmd[] = { "1. Add order", "2. Show orders", "3. back" };
+    string cmd[] = { "Add order", "Show orders", "back" };
     int cmdIndex = chooseCommands(cmd, 3, "Please enter command:");
     while (cmdIndex != 3)
     {
@@ -52,7 +53,7 @@ static void addCustomer(Queue& _customers)
         cmdIndex = chooseCommands(cmd, 3, "Please enter command:");
     }
 }
-static void serveCustomer(Queue& _customers)
+static void serveCustomer(Queue& _customers, Stack& _logs)
 {
     if (_customers.queueIsEmpty())
         cout << "There is no customer to serve\n";
@@ -62,33 +63,36 @@ static void serveCustomer(Queue& _customers)
 int main()
 {
     Queue* _customers = new Queue;
-    Stack logs;
-    logs.push("Restaurant opened");
+    Stack *logs = new Stack;
+    /*logs.push("Restaurant opened");
     Customer* ahmed = new Customer("Ahmed");
     ahmed->addOrder(Meal::Burger);
     ahmed->addOrder(Meal::Crepe);
     ahmed->addOrder(Meal::Liver);
     ahmed->getOrders();
     _customers->enqueue(ahmed);
-    _customers->enqueue(new Customer("Ali"));
-    string cmd[] = { "1. Add Customer" , "2. Serve Customer", "3. Exit" };
-    int cmdIndex = chooseCommands(cmd, 3, "Please enter command:");
-    while (cmdIndex != 3)
+    _customers->enqueue(new Customer("Ali"));*/
+    string cmd[] = { "Add Customer" , "Serve Customer", "Show Logs", "Exit"};
+    int cmdIndex = chooseCommands(cmd, 4, "Please enter command:");
+    while (cmdIndex != 4)
     {
         switch (cmdIndex)
         {
         case 1:
-            addCustomer(*_customers);
+            addCustomer(*_customers, *logs);
             break;
         case 2:
-            serveCustomer(*_customers);
+            serveCustomer(*_customers, *logs);
+            break;
+        case 3:
+            logs->display();
             break;
         default:
             cout << "Invalid input!\n";
             break;
         };
         cout << "=============\n";
-        cmdIndex = chooseCommands(cmd, 3, "Please enter command:");
+        cmdIndex = chooseCommands(cmd, 4, "Please enter command:");
     }
     exit(0);
     /*auto t = time(nullptr);
