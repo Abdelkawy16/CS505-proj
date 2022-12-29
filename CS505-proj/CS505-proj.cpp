@@ -9,7 +9,56 @@
 #include "Helper.cpp"
 
 using namespace std;
+static int chooseCommands(string cmds[], int size, string message)
+{
+    int cmdIndex = -1;
+    cout << message << endl;
+    for (int i = 0; i < size; i++)
+    {
+        cout << cmds[i] << endl;
+    }
+    cin >> cmdIndex;
 
+    return cmdIndex;
+}
+static void addCustomer(Queue& _customers)
+{
+    string name = "";
+    cout << "please enter customer name: ";
+    cin >> name;
+    Customer* _cust = new Customer(name);
+    _customers.enqueue(_cust);
+    string cmd[] = { "1. Add order", "2. Show orders", "3. back" };
+    int cmdIndex = chooseCommands(cmd, 3, "Please enter command:");
+    while (cmdIndex != 3)
+    {
+        switch (cmdIndex)
+        {
+        case 1:
+            cmdIndex = chooseCommands(MealString, 4, "choose meal number: ");
+            if(cmdIndex > 0 && cmdIndex <= 4)
+                _cust->addOrder((Meal)(cmdIndex - 1));
+            else
+                cout << "meal is not found!\n";
+            break;
+        case 2:
+            cout << _cust->getName() << " orderd: ";
+            _cust->getOrders();
+            break;
+        default:
+            cout << "Invalid input!\n";
+            break;
+        };
+        cmdIndex = chooseCommands(cmd, 3, "Please enter command:");
+    }
+}
+static void serveCustomer(Queue& _customers)
+{
+    if (_customers.queueIsEmpty())
+        cout << "There is no customer to serve\n";
+    else
+        cout << _customers.dequeue()->getName() + " is served successfully!\n";
+}
 int main()
 {
     Queue* _customers = new Queue;
@@ -23,22 +72,23 @@ int main()
     _customers->enqueue(ahmed);
     _customers->enqueue(new Customer("Ali"));
     string cmd[] = { "1. Add Customer" , "2. Serve Customer", "3. Exit" };
-    int cmdIndex = Helper::chooseCommands(cmd, 3);
+    int cmdIndex = chooseCommands(cmd, 3, "Please enter command:");
     while (cmdIndex != 3)
     {
         switch (cmdIndex)
         {
         case 1:
-            Helper::addCustomer(_customers);
+            addCustomer(*_customers);
             break;
         case 2:
-            Helper::serveCustomer(_customers);
+            serveCustomer(*_customers);
             break;
         default:
             cout << "Invalid input!\n";
             break;
         };
-        cmdIndex = Helper::chooseCommands(cmd, 3);
+        cout << "=============\n";
+        cmdIndex = chooseCommands(cmd, 3, "Please enter command:");
     }
     exit(0);
     /*auto t = time(nullptr);
